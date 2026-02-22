@@ -1,12 +1,12 @@
 package com.abbys.tms.data.tasks.dto;
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 @Getter
 @Setter
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class TaskRequest {
     private String title;
     private String description;
