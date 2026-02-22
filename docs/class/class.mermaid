@@ -1,0 +1,70 @@
+---
+config:
+  layout: elk
+---
+classDiagram
+
+class Role {
+  <<enumeration>>
+  ADMIN
+  MANAGER
+  EMPLOYEE
+}
+
+class TaskStatus {
+  <<enumeration>>
+  PENDING
+  IN_PROGRESS
+  COMPLETED
+  CANCELED
+}
+
+class TaskPriority {
+  <<enumeration>>
+  LOW
+  MEDIUM
+  HIGH
+}
+
+class User {
+  +Long id
+  +String name
+  +String email
+  +String password
+  +Role role
+  +Boolean enabled
+  +LocalDateTime createdAt
+  +LocalDateTime updatedAt
+}
+
+class Task {
+  +Long id
+  +String title
+  +String description
+  +TaskStatus status
+  +TaskPriority priority
+  +LocalDateTime dueDate
+  +Integer version
+  +LocalDateTime createdAt
+  +LocalDateTime updatedAt
+}
+
+class Comment {
+  +Long id
+  +String content
+  +LocalDateTime createdAt
+}
+
+class TaskHistory {
+  +Long id
+  +TaskStatus oldStatus
+  +TaskStatus newStatus
+  +LocalDateTime changedAt
+}
+
+User "1" --> "0..*" Task : creates
+User "1" --> "0..*" Task : assigned_to
+Task "1" --> "0..*" Comment
+User "1" --> "0..*" Comment : writes
+Task "1" --> "0..*" TaskHistory
+User "1" --> "0..*" TaskHistory : changes_status
