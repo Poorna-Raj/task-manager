@@ -1,0 +1,66 @@
+Table Users {
+  id int [pk]
+  name varchar [not null]
+  email varchar [not null, unique]
+  password varchar [not null]
+  role Role [not null]
+  enabled bool [not null, default: true]
+  created_at datetime [not null]
+  updated_at datetime [not null]
+}
+
+Table Tasks {
+  id int [pk]
+  title varchar [not null]
+  description text
+  status TaskStatus [not null, default: TaskStatus.PENDING]
+  priority TaskPriority [not null, default: TaskPriority.LOW]
+  created_by int [not null, ref: > Users.id]
+  assigned_to int [ref: > Users.id] 
+  due_date datetime
+  version int [not null, default: 0]
+  created_at datetime [not null]
+  updated_at datetime [not null]
+
+  indexes {
+    status
+    priority
+    assigned_to
+  }
+}
+
+Table Comments {
+  id int [pk]
+  content text [not null]
+  task_id int [not null, ref: > Tasks.id]
+  created_by int [not null, ref: > Users.id]
+  created_at datetime [not null]
+}
+
+Table Task_History {
+  id int [pk]
+  task_id int [not null, ref: > Tasks.id]
+  old_status TaskStatus [not null]
+  new_status TaskStatus [not null]
+  changed_by int [not null, ref: > Users.id]
+  changed_at datetime [not null]
+}
+
+Enum TaskStatus {
+  PENDING
+  IN_PROGRESS
+  COMPLETED
+  CANCELED
+}
+
+Enum TaskPriority {
+  LOW
+  MEDIUM
+  HIGH
+}
+
+Enum Role {
+  ADMIN
+  MANAGER
+  EMPLOYEE
+}
