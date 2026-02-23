@@ -24,6 +24,7 @@ public class UserService {
                 .role(this.stringToEnum(Role.class, req.getRole()))
                 .email(req.getEmail())
                 .password(passwordEncoder.encode(req.getPassword()))
+                .enabled(true)
                 .build();
         return mapToDto(repo.save(user));
     }
