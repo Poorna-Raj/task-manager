@@ -4,67 +4,74 @@ config:
 ---
 classDiagram
 
-class Role {
-  <<enumeration>>
-  ADMIN
-  MANAGER
-  EMPLOYEE
-}
+    %% --- ENUMERATIONS ---
+    class Role {
+        <<enumeration>>
+        ADMIN
+        MANAGER
+        EMPLOYEE
+    }
 
-class TaskStatus {
-  <<enumeration>>
-  PENDING
-  IN_PROGRESS
-  COMPLETED
-  CANCELED
-}
+    class TaskStatus {
+        <<enumeration>>
+        PENDING
+        IN_PROGRESS
+        COMPLETED
+        CANCELED
+    }
 
-class TaskPriority {
-  <<enumeration>>
-  LOW
-  MEDIUM
-  HIGH
-}
+    class TaskPriority {
+        <<enumeration>>
+        LOW
+        MEDIUM
+        HIGH
+    }
 
-class User {
-  +Long id
-  +String name
-  +String email
-  +String password
-  +Role role
-  +Boolean enabled
-  +LocalDateTime createdAt
-  +LocalDateTime updatedAt
-}
+    %% --- ENTITIES ---
+    class User {
+        +Long id
+        +String name
+        +String email
+        +String password
+        +Role role
+        +Boolean enabled
+        +LocalDateTime createdAt
+        +LocalDateTime updatedAt
+    }
 
-class Task {
-  +Long id
-  +String title
-  +String description
-  +TaskStatus status
-  +TaskPriority priority
-  +LocalDateTime dueDate
-  +Integer version
-  +LocalDateTime createdAt
-  +LocalDateTime updatedAt
-}
+    class Task {
+        +Long id
+        +String title
+        +String description
+        +TaskStatus status
+        +TaskPriority priority
+        +LocalDateTime dueDate
+        +Integer version
+        +LocalDateTime createdAt
+        +LocalDateTime updatedAt
+    }
 
-class Comment {
-  +Long id
-  +String content
-  +LocalDateTime createdAt
-}
+    class Comment {
+        +Long id
+        +String content
+        +LocalDateTime createdAt
+    }
 
-class TaskHistory {
-  +Long id
-  +TaskStatus oldStatus
-  +TaskStatus newStatus
-  +LocalDateTime changedAt
-}
+    class TaskHistory {
+        +Long id
+        +TaskStatus oldStatus
+        +TaskStatus newStatus
+        +LocalDateTime changedAt
+    }
 
-User "1" --> "0..*" Task : creates
-User "1" --> "0..*" Task : assigned_to
-Task "1" --> "0..*" Comment
-User "1" --> "0..*" Comment : writes
-Task "1" --> "0..*" TaskHistory
-User "1" --> "0..*" TaskHistory : changes_status
+    %% --- UNIDIRECTIONAL RELATIONSHIPS ---
+    %% Arrow points TO the class being referenced (the one that is known)
+    
+    Task "0..*" --> "1" User : created_by
+    Task "0..*" --> "1" User : assigned_to
+    
+    Comment "0..*" --> "1" Task : belongs_to
+    Comment "0..*" --> "1" User : written_by
+    
+    TaskHistory "0..*" --> "1" Task : records_changes_for
+    TaskHistory "0..*" --> "1" User : performed_by
