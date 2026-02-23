@@ -1,10 +1,12 @@
 package com.abbys.tms.controller;
 
+import com.abbys.tms.data.taskHistory.dto.TaskHistoryResponse;
 import com.abbys.tms.data.tasks.dto.TaskRequest;
 import com.abbys.tms.data.tasks.dto.TaskResponse;
 import com.abbys.tms.data.user.entity.User;
 import com.abbys.tms.data.user.repository.UserRepo;
 import com.abbys.tms.exception.NotFound;
+import com.abbys.tms.service.TaskHistoryService;
 import com.abbys.tms.service.TaskService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -23,6 +25,7 @@ public class TaskController {
 
     private final TaskService taskService;
     private final UserRepo userRepo;
+    private final TaskHistoryService taskHistoryService;
 
     @PostMapping
     @PreAuthorize("hasRole('MANAGER')")
@@ -58,6 +61,12 @@ public class TaskController {
     public ResponseEntity<Void> deleteTask(@PathVariable Long id) {
         taskService.deleteTask(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/{taskId}/history")
+    @PreAuthorize("hasRole('MANAGER')")
+    public ResponseEntity<List<TaskHistoryResponse>> getTaskHistoryByTask(@PathVariable Long taskId) {
+        return ResponseEntity.ok(taskHistoryService.getHistoryByTask(taskId));
     }
 
     private Long resolveUserId(UserDetails userDetails) {
