@@ -10,6 +10,8 @@ import com.abbys.tms.data.user.entity.User;
 import com.abbys.tms.data.user.repository.UserRepo;
 import com.abbys.tms.exception.NotFound;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -51,11 +53,10 @@ public class TaskService {
         return mapToResponse(taskRepo.save(task));
     }
 
-    public List<TaskResponse> getAllTasks() {
-        return taskRepo.findAll()
-                .stream()
-                .map(this::mapToResponse)
-                .collect(Collectors.toList());
+    public Page<TaskResponse> getAllTasks(Pageable pageable) {
+        Page<Task> page;
+        page = taskRepo.findAll(pageable);
+        return page.map(this::mapToResponse);
     }
 
     public TaskResponse getTaskById(Long taskId) {
