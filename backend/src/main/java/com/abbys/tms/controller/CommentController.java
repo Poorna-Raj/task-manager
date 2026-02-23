@@ -8,6 +8,8 @@ import com.abbys.tms.exception.NotFound;
 import com.abbys.tms.service.CommentService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -48,8 +50,8 @@ public class CommentController {
     }
 
     @GetMapping
-    public ResponseEntity<List<CommentResponse>> getAllComments(@RequestParam(required = false) Long taskId) {
-        return ResponseEntity.ok(commentService.getAllComments(taskId));
+    public ResponseEntity<Page<CommentResponse>> getAllComments(@RequestParam(required = false) Long taskId, Pageable pageable) {
+        return ResponseEntity.ok(commentService.getAllComments(taskId,pageable));
     }
 
     private Long resolveUserId(UserDetails userDetails) {

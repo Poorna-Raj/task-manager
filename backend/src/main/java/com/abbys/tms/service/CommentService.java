@@ -10,9 +10,10 @@ import com.abbys.tms.data.user.entity.User;
 import com.abbys.tms.data.user.repository.UserRepo;
 import com.abbys.tms.exception.NotFound;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.Objects;
 
 @Service
@@ -62,13 +63,15 @@ public class CommentService {
         return mapToDto(comment);
     }
 
-    public List<CommentResponse> getAllComments(Long taskId) {
-        if(taskId == null) {
-            return commentRepo.findAll().stream().map(this::mapToDto).toList();
+    public Page<CommentResponse> getAllComments(Long taskId, Pageable pageable) {
+        Page<Comment> page;
+
+        if (taskId == null) {
+            page = commentRepo.findAll(pageable);
+        } else {
+            page = commentRepo.findByTaskId(taskId, pageable);
         }
-        return commentRepo.findByTaskIdOrderByCreatedAtDesc(taskId).stream()
-                .map(this::mapToDto)
-                .toList();
+        return page.map(this::mapToDto);
     }
 
     private CommentResponse mapToDto(Comment save) {
