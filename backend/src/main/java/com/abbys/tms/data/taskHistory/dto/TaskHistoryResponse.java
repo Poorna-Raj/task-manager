@@ -9,7 +9,6 @@ import lombok.*;
 @Builder
 public class TaskHistoryResponse {
     private Long id;
-    private Long taskId;
     private String oldStatus;
     private String newStatus;
     private Long changedBy;
