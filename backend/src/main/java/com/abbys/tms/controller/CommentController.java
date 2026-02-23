@@ -48,7 +48,7 @@ public class CommentController {
     }
 
     @GetMapping
-    public ResponseEntity<List<CommentResponse>> getAllComments(@RequestParam Long taskId) {
+    public ResponseEntity<List<CommentResponse>> getAllComments(@RequestParam(required = false) Long taskId) {
         return ResponseEntity.ok(commentService.getAllComments(taskId));
     }
 
