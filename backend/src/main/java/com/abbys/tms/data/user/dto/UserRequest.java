@@ -1,9 +1,6 @@
 package com.abbys.tms.data.user.dto;
 
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.Max;
-import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.*;
 import lombok.*;
 
 @Getter
@@ -16,8 +13,7 @@ public class UserRequest {
     private String name;
     @Email(message = "Invalid Email")
     private String email;
-    @Min(value = 6,message = "Password must have minimum of 6 characters")
-    @Max(value = 10,message = "Password must have maximum of 10 characters")
+    @Size(min = 6, max = 10, message = "Password must be between 6 and 10 characters")
     private String password;
     @NotBlank(message = "Role is required")
     private String role;
