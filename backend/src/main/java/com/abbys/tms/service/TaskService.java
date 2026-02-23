@@ -11,6 +11,7 @@ import com.abbys.tms.data.user.repository.UserRepo;
 import com.abbys.tms.exception.NotFound;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -23,6 +24,7 @@ public class TaskService {
 
     private final TaskRepo taskRepo;
     private final UserRepo userRepo;
+    private final TaskHistoryService taskHistoryService;
 
     private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ISO_LOCAL_DATE_TIME;
 
@@ -62,19 +64,24 @@ public class TaskService {
         return mapToResponse(task);
     }
 
+    @Transactional
     public TaskResponse updateTask(Long taskId, TaskRequest request) {
         Task task = taskRepo.findById(taskId)
                 .orElseThrow(() -> new NotFound("Task not found with id: " + taskId));
 
-        if (request.getTitle() != null) task.setTitle(request.getTitle());
-        if (request.getDescription() != null) task.setDescription(request.getDescription());
-        if (request.getStatus() != null) task.setStatus(TaskStatus.valueOf(request.getStatus().toUpperCase()));
-        if (request.getPriority() != null) task.setPriority(TaskPriority.valueOf(request.getPriority().toUpperCase()));
-        if (request.getDueDate() != null) task.setDueDate(LocalDateTime.parse(request.getDueDate(), FORMATTER));
+        User assignee = userRepo.findById(request.getAssignedTo())
+                .orElseThrow(() -> new NotFound("Assignee not found with id: " + request.getAssignedTo()));
+
+        task.setTitle(request.getTitle());
+        task.setDescription(request.getDescription());
+
+        taskHistoryService.createHistory(task,task.getStatus(), TaskStatus.valueOf(request.getStatus()),assignee);
+
+        task.setStatus(TaskStatus.valueOf(request.getStatus().toUpperCase()));
+        task.setPriority(TaskPriority.valueOf(request.getPriority().toUpperCase()));
+        task.setDueDate(LocalDateTime.parse(request.getDueDate(), FORMATTER));
 
         if (request.getAssignedTo() != null) {
-            User assignee = userRepo.findById(request.getAssignedTo())
-                    .orElseThrow(() -> new NotFound("Assignee not found with id: " + request.getAssignedTo()));
             task.setAssigned_to(assignee);
         }
 
