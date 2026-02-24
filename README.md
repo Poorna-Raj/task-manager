@@ -1,10 +1,8 @@
 # Task Management System (TMS) Backend
 <p align="center">
-<img src="https://img.shields.io/github/languages/top/Poorna-Raj/task-manager?color=orange&style=for-the-badge" />
-<img src="https://img.shields.io/github/last-commit/Poorna-Raj/task-manager?style=for-the-badge" />
-<img src="https://img.shields.io/badge/Spring_Boot-4.x-brightgreen?style=for-the-badge&logo=springboot" />
-<img src="https://img.shields.io/badge/Java-17-blue?style=for-the-badge&logo=openjdk" />
-<img src="https://img.shields.io/badge/Security-JWT-black?style=for-the-badge&logo=jsonwebtokens" />
+  <img src="https://img.shields.io/badge/Main_Language-Java_17-%23ED8B00?style=for-the-badge&logo=openjdk&logoColor=white" />
+  <img src="https://img.shields.io/badge/Framework-Spring_Boot_4.x-%236DB33F?style=for-the-badge&logo=springboot&logoColor=white" />
+  <img src="https://img.shields.io/badge/Security-JWT_Stateless-black?style=for-the-badge&logo=jsonwebtokens&logoColor=white" />
 </p>
 
 A Task Management System backend built with Spring Boot, JWT authentication, and RESTful APIs. This project allows users to manage tasks, comments, and track task history efficiently. Designed as a portfolio project, it demonstrates solid backend practices including DTO validation, JWT authentication and authorization, pagination, and global exception handling.
